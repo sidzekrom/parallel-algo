@@ -28,7 +28,8 @@ using namespace std;
    until we are all the way down to the base case: the overhead is too much
    then */
 vector<long double>
-    dft_sequential(vector<long double> func, int start_ind, int end_ind) {
+    dft_sequential(vector<long double> func, int start_ind, int end_ind,
+        long double normalization) {
 
     /* just because of the nature of the Fourier transform, we require that
      * end_ind - start_ind be a power of 2 */
@@ -53,8 +54,8 @@ vector<long double>
 
     /* make sure the scaling factors are correct */
     for (int i = 0; i < mid_ind - start_ind; i++) {
-        discrete_ft[i] = 0.5 * (dft_top[i] + dft_bottom[i]);
-        discrete_ft[mid_ind - start_ind + i] = 0.5 * (dft_top[i] -
+        discrete_ft[i] = normalization * (dft_top[i] + dft_bottom[i]);
+        discrete_ft[mid_ind - start_ind + i] = normalization * (dft_top[i] -
             dft_bottom[i]);
     }
 
