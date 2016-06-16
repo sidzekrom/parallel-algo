@@ -23,3 +23,31 @@ using namespace std;
 
 /* we write a single threaded version of the DFT first */
 
+vector<long double> dft_sequential(vector<long double> func, int start_ind, int end_ind) {
+    /* just because of the nature of the Fourier transform, we require that
+     * end_ind - start_ind be a power of 2 */
+    if (start_ind == end_ind) {
+        /* this is our base case where we want the Fourier Transform of a
+         * function on one variable (the zero dimensional case) */
+        return {func[start_ind]};
+    }
+    /* it is an invariant in the F_2 case that end_ind - start_ind is a
+     * power of 2. We maintain it */
+    
+    int range = end_ind - start_ind;
+    int mid_ind = start_ind + (range / 2);
+
+    /* it is easy to see the power of 2 invariant is maintained */
+    /* the following is the 'divide' step */
+    vector<long double> dft_top = dft_sequential(func, start_ind, mid_ind);
+    vector<long double dft_bottom = dft_sequential(func, mid_ind, end_ind);
+    
+    /* the following is the conquer step */
+    vector<long double> discrete_ft(end_ind - start_ind);
+    for (int i = 0; i < mid_ind - start_ind; i++) {
+        discrete_ft[i] = 0.5 * (dft_top[i] + dft_bottom[i]);
+        discrete_ft[mid_ind - start_ind + i] = 0.5 * (dft_top[i] -
+            dft_bottom[i]);
+    }
+    return discrete_ft(end_ind - start_ind);
+}
